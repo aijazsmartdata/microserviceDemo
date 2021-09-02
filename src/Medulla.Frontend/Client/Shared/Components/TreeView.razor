@@ -1,0 +1,17 @@
+<h3>TreeView</h3>
+<div>
+    <p>Hi, my name is @name</p>
+    <button @onclick="UpdateName">Click</button>
+</div>
+
+
+@code {
+    string name = "Keith";
+
+    private void UpdateName()
+    {
+        Console.WriteLine("This got executed");
+        name = "Test";
+    }
+    
+}
