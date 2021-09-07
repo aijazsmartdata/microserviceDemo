@@ -1,0 +1,50 @@
+﻿@using Medulla.Frontend.Client.Models
+@using Microsoft.Extensions.Logging
+@using System.Diagnostics.Metrics
+
+<div>
+    <CascadingValue Value="this">
+        <h3>(@Components.Count())</h3>
+        <ul
+            ondragover="event.preventDefault();"
+            ondragstart="event.dataTransfer.setData('', event.target.id);"
+            @ondrop="HandleDrop">
+
+            @foreach (var btnComponent in ComponentList)
+            {
+                <ButtonComponent SetCurrentBTN="@SetCurrentBTN" ButtonModel="btnComponent"/>
+            }
+
+        </ul>
+    </CascadingValue>
+</div>
+
+
+@code {
+
+    [Parameter]
+    public List<ButtonModel> ComponentList { get; set; }
+
+    public ButtonModel Payload { get; set; }
+
+    List<ButtonModel> Components = new List<ButtonModel>();
+
+    /*
+     *  This method gets called as soon you drop a button
+     */
+    private void HandleDrop()
+    {
+        ComponentList.Add(Payload);
+    }
+
+    /*
+     *  This method gets called as soon you drag a button
+     */
+    public void SetCurrentBTN(ButtonModel buttonModel)
+    {
+        Payload = buttonModel;
+        // ComponentList.Add(Payload);
+
+    }
+
+}

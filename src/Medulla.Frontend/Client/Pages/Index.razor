@@ -1,3 +1,27 @@
 ﻿@page "/"
 
 <h1>Hello, world!</h1>
+
+<ComponentContainer ComponentList="Buttons"/>
+<ComponentContainer ComponentList="Buttons2"/>
+
+
+@code {
+    List<ButtonModel> Buttons = new List<ButtonModel>();
+    List<ButtonModel> Buttons2 = new List<ButtonModel>();
+
+    string lastUpdatedJob = "";
+
+    protected override void OnInitialized()
+    {
+        Buttons.Add(new ButtonModel {Name = "BTN1", Text = "Mow the lawn"});
+        Buttons.Add(new ButtonModel {Name = "BTN2", Text = "Go to the gym"});
+        Buttons.Add(new ButtonModel {Name = "BTN3", Text = "Call Ollie"});
+        Buttons.Add(new ButtonModel {Name = "BTN4", Text = "Call Ollie"});
+        Buttons.Add(new ButtonModel {Name = "BTN5", Text = "Call Ollie"});
+        Buttons.Add(new ButtonModel {Name = "BTN6", Text = "Call Ollie"});
+        Buttons2.Add(new ButtonModel {Name = "BTN215", Text = "Call Ollie"});
+    }
+
+
+}

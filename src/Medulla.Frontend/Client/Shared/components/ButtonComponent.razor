@@ -1,0 +1,25 @@
+﻿@using Medulla.Frontend.Client.Models
+<li class="draggable" draggable="true" title="@ButtonModel.Name" @ondragstart="@(() => SetCurrentBTN.InvokeAsync(@ButtonModel))">
+    <p class="description">@ButtonModel.Name</p>
+</li>
+
+@code {
+
+    [CascadingParameter]
+    ComponentContainer Container { get; set; }
+
+    [Parameter]
+    public ButtonModel ButtonModel { get; set; }
+
+    [Parameter]
+    public EventCallback<ButtonModel> SetCurrentBTN { get; set; }
+
+    // private void HandleDragStart(ButtonModel selectedButton)
+    // {
+    //     Container.Payload = selectedButton;
+    // }
+
+
+
+}
+
