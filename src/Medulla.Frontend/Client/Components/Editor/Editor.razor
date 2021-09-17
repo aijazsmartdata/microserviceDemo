@@ -24,6 +24,12 @@
         Children = { }
     };
 
+    public void SetProperties(Properties properties)
+    {
+        _properties = properties;
+        StateChanged();
+    }
+    
     public void StateChanged()
     {
         StateHasChanged();
@@ -104,6 +110,19 @@
                     new PaletteComponent() {
                         Name = "FlashAlertWarn", SvgString = _buttonIcon,
                         RenderComponentType = "Medulla.Frontend.Client.Components.RegisteredComponents.Alerts.FlashAlertWarn"
+                    },
+                },
+            }
+        },
+        new() {
+            Name = "Layouts",
+            PaletteWindowComponents = new PaletteWindowComponents()
+            {
+                ComponentList = new()
+                {
+                    new PaletteComponent() {
+                        Name = "Header", SvgString = _buttonIcon,
+                        RenderComponentType = "Medulla.Frontend.Client.Components.RegisteredComponents.Layouts.Header"
                     },
                 },
             }
