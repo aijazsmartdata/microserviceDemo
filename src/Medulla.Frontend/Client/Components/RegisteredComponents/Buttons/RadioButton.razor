@@ -1,0 +1,74 @@
+@* <input *@
+@*     type="radio" *@
+@*     @onclick="RadioButtonWasClicked"> *@
+@*     @Content *@
+@*     @ChildContent *@
+@* </input> *@
+@using System.Globalization
+@inherits Microsoft.AspNetCore.Components.Forms.InputBase<TValue>
+@typeparam TValue
+
+<input @attributes="AdditionalAttributes" type="radio" value="@SelectedValue" 
+       @Content @ChildContent checked="@(SelectedValue.Equals(Value))" @onchange="OnChange" />
+
+@code {
+
+    /*
+     * These parameters are system required
+     */
+
+    [Parameter]
+    public RenderFragment ChildContent { get; set; } = default!;
+
+    [Parameter]
+    public EditorViewNode EditorViewNode { get; set; } = default!;
+
+    [Parameter]
+    public Editor Editor { get; set; } = default!;
+
+    /*
+     * These parameters are system required
+     */
+
+
+    /*
+     * These parameters need to be modifiable in Properties window
+     */
+
+    [Parameter]
+    public string Content { get; set; } = "{No Button Content}";
+
+    public void RadioButtonWasClicked()
+    {
+        Console.WriteLine("Radio Button was clicked");
+    }
+
+    [Parameter]
+    public TValue SelectedValue { get; set; }
+
+    private void OnChange(ChangeEventArgs args)
+    {
+        CurrentValueAsString = args.Value.ToString();
+    }
+
+    protected override bool TryParseValueFromString(string value, 
+        out TValue result, out string errorMessage)
+    {
+        var success = BindConverter.TryConvertTo<TValue>(
+            value, CultureInfo.CurrentCulture, out var parsedValue);
+        if (success)
+        {
+            result = parsedValue;
+            errorMessage = null;
+
+            return true;
+        }
+        else
+        {
+            result = default;
+            errorMessage = $"{FieldIdentifier.FieldName} field isn't valid.";
+
+            return false;
+        }
+    }
+}
