@@ -2,37 +2,71 @@
 
 <Window WindowTitle="Component Window">
     <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
-                    <div class="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
-                        
-                        <nav class="UnderlineNav" aria-label="Foo bar">
-                            <div class="UnderlineNav-body">
-                                @if (ComponentCategories.ComponentCategories != null)
-                                {
-                                    @foreach (var category in ComponentCategories.ComponentCategories)
-                                    {
-                                        <a @onclick="() => UpdateActiveCategory(category)" @attributes="@IsCategoryActive(category)" class=" UnderlineNav-item color-bg-canvas">@category.Name</a>
-                                    }    
-                                }
-                            </div>
-                            <div class="UnderlineNav-actions">
-                            </div>
-                        </nav>
-                        
-                        @if (ActiveCategory != null &&
-                             ActiveCategory.PaletteWindowComponents != null &&
-                             ActiveCategory.PaletteWindowComponents.ComponentList.Count > 0
-                            )
+        <div class="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
+
+            <nav class="UnderlineNav" aria-label="Foo bar">
+                <div class="UnderlineNav-body">
+                    <label for="name">Name</label>
+                    <input class="form-control" type="text" id="name" @bind="SearchString"/>
+                    @if (ComponentCategories.ComponentCategories != null)
+                    {
+                        @foreach (var category in ComponentCategories.ComponentCategories)
                         {
-                            <div style="display:flex;flex-wrap:wrap" class="flex shadow overflow-hidden border-b border-gray-200 sm:rounded-lg p-3">
-                                @foreach (var component in ActiveCategory.PaletteWindowComponents.ComponentList)
+                            <a @onclick="() => UpdateActiveCategory(category)" @attributes="@IsCategoryActive(category)" class=" UnderlineNav-item color-bg-canvas">@category.Name</a>
+                        }
+                    }
+                </div>
+                <div class="UnderlineNav-actions">
+                </div>
+            </nav>
+            @if (SearchString.Length != 0)
+            {
+                <div style="display:flex;flex-wrap:wrap" class="flex shadow overflow-hidden border-b border-gray-200 sm:rounded-lg p-3">
+                    @foreach (var componentList in ComponentCategories.ComponentCategories)
+                    {
+                        Console.WriteLine("Current ComponentList",componentList);
+                        @foreach (var component in componentList.PaletteWindowComponents.ComponentList)
+                        {
+                            Console.WriteLine("Current Component",component);
+                            if (SearchString.Length != 0)
+                            {
+                                if (component.Name.Contains(SearchString))
                                 {
                                     <PaletteWindowComponent Component="component"/>
                                 }
-                            </div>    
+                            }
                         }
-                        
-                    </div>
+                    }
                 </div>
+            }
+            else
+            {
+                @if (ActiveCategory != null &&
+                     ActiveCategory.PaletteWindowComponents != null &&
+                     ActiveCategory.PaletteWindowComponents.ComponentList.Count > 0
+                    )
+                {
+                    <div style="display:flex;flex-wrap:wrap" class="flex shadow overflow-hidden border-b border-gray-200 sm:rounded-lg p-3">
+                        @foreach (var component in ActiveCategory.PaletteWindowComponents.ComponentList)
+                        {
+                            if (SearchString.Length != 0)
+                            {
+                                if (component.Name.Contains(SearchString))
+                                {
+                                    <PaletteWindowComponent Component="component"/>
+                                }
+                            }
+                            else
+                            {
+                                <PaletteWindowComponent Component="component"/>
+                            }
+                        }
+                    </div>
+                }
+            }
+
+        </div>
+    </div>
 </Window>
 
 @code {
@@ -40,15 +74,17 @@
     [Parameter]
     [Required]
     public PaletteComponentCategories ComponentCategories { get; set; } = default!;
-    
+
     public PaletteComponentCategory? ActiveCategory { get; set; } = null;
 
     [CascadingParameter]
     [Required]
     public Editor Editor { get; set; } = new Editor();
-   
-    [Parameter] 
+
+    [Parameter]
     public string WindowTitle { get; set; } = "Component Window";
+
+    private string SearchString { get; set; } = "";
 
     public void UpdateActiveCategory(PaletteComponentCategory category)
     {
@@ -60,7 +96,7 @@
         var dict = new Dictionary<string, object>();
         if (ActiveCategory != null && category.Name == ActiveCategory.Name)
         {
-            dict.Add("aria-current","page");
+            dict.Add("aria-current", "page");
         }
         return dict;
     }
