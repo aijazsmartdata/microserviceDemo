@@ -7,7 +7,7 @@
             <nav class="UnderlineNav" aria-label="Foo bar">
                 <div class="UnderlineNav-body">
                     <label for="name">Name</label>
-                    <input class="form-control" type="text" id="name" @bind="SearchString"/>
+                    <input @oninput="(value) => UpdateSearch(value.Value.ToString())" class="form-control" type="text" id="name"/>
                     @if (ComponentCategories.ComponentCategories != null)
                     {
                         @foreach (var category in ComponentCategories.ComponentCategories)
@@ -30,7 +30,7 @@
                             Console.WriteLine("Current Component",component);
                             if (SearchString.Length != 0)
                             {
-                                if (component.Name.Contains(SearchString))
+                                if (component.Name.ToLower().Contains(SearchString.ToLower()))
                                 {
                                     <PaletteWindowComponent Component="component"/>
                                 }
@@ -51,7 +51,7 @@
                         {
                             if (SearchString.Length != 0)
                             {
-                                if (component.Name.Contains(SearchString))
+                                if (component.Name.ToLower().Contains(SearchString.ToLower()))
                                 {
                                     <PaletteWindowComponent Component="component"/>
                                 }
@@ -85,6 +85,13 @@
     public string WindowTitle { get; set; } = "Component Window";
 
     private string SearchString { get; set; } = "";
+
+
+    private void UpdateSearch(string value)
+    {
+        SearchString = value;
+        Editor.StateChanged();
+    }
 
     public void UpdateActiveCategory(PaletteComponentCategory category)
     {
